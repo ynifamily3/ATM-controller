@@ -62,11 +62,24 @@ class AtmController {
     }
   }
 
-  selectAccount(accountName: string) {
-    if (this.atm.state === "CARD_INSERTED") {
+  createAccount(accountName: string) {
+    if (this.atm.getState() === "IDLE") {
+      throw new Error("There is no card inserted.");
+    }
+    if (this.atm.getState() === "CARD_INSERTED") {
       throw new Error("You need to authenticate the PIN on the card.");
     }
-    if (this.atm.state === "IDLE") {
+    if (this.getCard().accounts.has(accountName)) {
+      throw new Error("A card with this name already exists.");
+    }
+    this.getCard().accounts.set(accountName, { balance: 0 });
+  }
+
+  selectAccount(accountName: string) {
+    if (this.atm.getState() === "CARD_INSERTED") {
+      throw new Error("You need to authenticate the PIN on the card.");
+    }
+    if (this.atm.getState() === "IDLE") {
       throw new Error("There is no card inserted.");
     }
     if (!this.getCard().accounts.has(accountName)) {
@@ -80,10 +93,10 @@ class AtmController {
     if (this.atm.getState() == "IDLE") {
       throw new Error("There is no card inserted.");
     }
-    if (this.atm.state === "CARD_INSERTED") {
+    if (this.atm.getState() === "CARD_INSERTED") {
       throw new Error("You need to authenticate the PIN on the card.");
     }
-    if (this.atm.state === "PIN_CORRECT") {
+    if (this.atm.getState() === "PIN_CORRECT") {
       throw new Error("No account has been selected.");
     }
     return this.getAccount().balance;
@@ -93,10 +106,10 @@ class AtmController {
     if (this.atm.getState() == "IDLE") {
       throw new Error("There is no card inserted.");
     }
-    if (this.atm.state === "CARD_INSERTED") {
+    if (this.atm.getState() === "CARD_INSERTED") {
       throw new Error("You need to authenticate the PIN on the card.");
     }
-    if (this.atm.state === "PIN_CORRECT") {
+    if (this.atm.getState() === "PIN_CORRECT") {
       throw new Error("No account has been selected.");
     }
     if (
@@ -114,10 +127,10 @@ class AtmController {
     if (this.atm.getState() == "IDLE") {
       throw new Error("There is no card inserted.");
     }
-    if (this.atm.state === "CARD_INSERTED") {
+    if (this.atm.getState() === "CARD_INSERTED") {
       throw new Error("You need to authenticate the PIN on the card.");
     }
-    if (this.atm.state === "PIN_CORRECT") {
+    if (this.atm.getState() === "PIN_CORRECT") {
       throw new Error("No account has been selected.");
     }
     if (amount < 0 || Number.isNaN(amount) || !Number.isFinite(amount)) {
