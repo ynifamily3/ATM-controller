@@ -1,2 +1,10 @@
-var x = 3;
-export default x;
+import { AtmModel } from "./AtmModel";
+
+class AtmController {
+  atm: AtmModel;
+  constructor(atm: AtmModel) {
+    this.atm = atm;
+  }
+}
+
+export { AtmController };
