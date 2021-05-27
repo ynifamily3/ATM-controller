@@ -6,19 +6,16 @@ class AtmController {
     this.#atm = atm;
   }
 
-  // private
   #getCard = (): ICard => {
     return this.#atm.getCards().get(this.#atm.getCurrentCardName()!)!;
   };
 
-  // private
   #getAccount = (): IAccount => {
     return this.#getCard()!.accounts.get(this.#atm.getCurrentAccountName()!)!;
   };
 
-  // ext.
   createCard(cardName: string, pin: number) {
-    if (this.#atm.getCards().get(cardName)) {
+    if (this.#atm.getCards().has(cardName)) {
       throw new Error("A card with this name already exists.");
     }
     const card: ICard = {
