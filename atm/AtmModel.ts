@@ -4,7 +4,7 @@ interface IAccount {
 
 interface ICard {
   pin: number;
-  accounts: Map<string, Account>; // <accountName, account>
+  accounts: Map<string, IAccount>; // <accountName, account>
 }
 
 type IAtmState = "IDLE" | "CARD_INSERTED" | "PIN_CORRECT" | "ACCOUNT_SELECTED";
@@ -50,7 +50,7 @@ class AtmModel {
     return this.currentAccountName;
   }
 
-  setCurrentAccoundName(accountName: string | null) {
+  setCurrentAccountName(accountName: string | null) {
     this.currentAccountName = accountName;
   }
 }
