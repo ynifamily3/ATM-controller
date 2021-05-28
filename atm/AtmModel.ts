@@ -1,14 +1,4 @@
-interface IAccount {
-  balance: number;
-}
-
-interface ICard {
-  pin: number;
-  accounts: Map<string, IAccount>; // <accountName, account>
-}
-
-type IAtmState = "IDLE" | "CARD_INSERTED" | "PIN_CORRECT" | "ACCOUNT_SELECTED";
-
+import { IAccount, IAtmState, ICard } from "../entity";
 class AtmModel {
   cards: Map<string, ICard>; // <cardName, card>
   state: IAtmState;

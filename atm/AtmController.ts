@@ -1,4 +1,5 @@
-import { AtmModel, IAccount, ICard } from "./AtmModel";
+import { AtmModel } from "./AtmModel";
+import { IAccount, ICard } from "../entity";
 
 class AtmController {
   #atm: AtmModel;
@@ -14,7 +15,7 @@ class AtmController {
     return this.#getCard()!.accounts.get(this.#atm.getCurrentAccountName()!)!;
   };
 
-  createCard(cardName: string, pin: number) {
+  createCard(cardName: string, pin: string) {
     if (this.#atm.getCards().has(cardName)) {
       throw new Error("A card with this name already exists.");
     }
@@ -45,7 +46,7 @@ class AtmController {
     this.#atm.setCurrentAccountName(null);
   }
 
-  authenticatePIN(pin: number) {
+  authenticatePIN(pin: string) {
     if (this.#atm.getState() == "IDLE") {
       throw new Error("There is no card inserted.");
     }
@@ -67,7 +68,7 @@ class AtmController {
       throw new Error("You need to authenticate the PIN on the card.");
     }
     if (this.#getCard().accounts.has(accountName)) {
-      throw new Error("A card with this name already exists.");
+      throw new Error("The same account name already exists on this card.");
     }
     this.#getCard().accounts.set(accountName, { balance: 0 });
   }
