@@ -147,8 +147,12 @@ async function deposit(
       if (!accounts.has(accountName)) {
         reject("This account does not exist.");
       } else {
-        accounts.get(accountName)!.balance += Math.floor(amount);
-        resolve("success");
+        if (accounts.get(accountName)!.balance + Math.floor(amount) < 0) {
+          reject("The amount available for withdrawal is insufficient.");
+        } else {
+          accounts.get(accountName)!.balance += Math.floor(amount);
+          resolve("success");
+        }
       }
     }
   });
