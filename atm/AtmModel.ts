@@ -1,23 +1,15 @@
 import { IAccount, IAtmState, ICard } from "../entity";
 class AtmModel {
-  cards: Map<string, ICard>; // <cardName, card>
   state: IAtmState;
+  token: string | null;
   currentCardName: string | null;
   currentAccountName: string | null;
 
   constructor() {
-    this.cards = new Map<string, ICard>();
     this.state = "IDLE";
+    this.token = null;
     this.currentCardName = null;
     this.currentAccountName = null;
-  }
-
-  getCards() {
-    return this.cards;
-  }
-
-  setCards(cards: Map<string, ICard>) {
-    this.cards = cards;
   }
 
   getState() {
@@ -26,6 +18,14 @@ class AtmModel {
 
   setState(state: IAtmState) {
     this.state = state;
+  }
+
+  getToken() {
+    return this.token;
+  }
+
+  setToken(token: string) {
+    this.token = token;
   }
 
   getCurrentCardName() {

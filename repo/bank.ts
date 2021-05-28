@@ -4,6 +4,11 @@ import { IAccount, ICard } from "../entity";
 const cards = new Map<string, ICard>(); // <cardName, card>
 const temporaryAuthenticationToken = new Map<string, string>(); // <authenticationToken, cardName>
 
+function resetDB() {
+  cards.clear();
+  temporaryAuthenticationToken.clear();
+}
+
 function createRandomToken(): string {
   return Math.random().toString(36).substring(5);
 }
@@ -13,6 +18,19 @@ function isPINAuthenticated(token: string, cardName: string) {
     temporaryAuthenticationToken.has(token) &&
     temporaryAuthenticationToken.get(token) === cardName
   );
+}
+
+async function isValidCard(cardName: string) {
+  return await new Promise<boolean>((resolve) => {
+    resolve(cards.has(cardName));
+  });
+}
+
+async function isValidAccount(cardName: string, accountName: string) {
+  if (!(await isValidCard(cardName))) {
+    return Promise.resolve(false);
+  }
+  return Promise.resolve(cards.get(cardName)!.accounts.has(accountName));
 }
 
 async function createCard(cardName: string, pin: string) {
@@ -52,12 +70,12 @@ async function authenticatePIN(cardName: string, pin: string) {
   });
 }
 
-async function deauthentication(token: string) {
+async function deauthentication(token: string | null) {
   return await new Promise<string>((resolve) => {
-    if (temporaryAuthenticationToken.has(token)) {
+    if (token && temporaryAuthenticationToken.has(token)) {
       temporaryAuthenticationToken.delete(token);
-      resolve("success");
     }
+    resolve("success");
   });
 }
 
@@ -153,4 +171,7 @@ export {
   getBalance,
   deposit,
   withdraw,
+  isValidCard,
+  isValidAccount,
+  resetDB,
 };
